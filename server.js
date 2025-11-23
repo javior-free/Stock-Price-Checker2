@@ -34,23 +34,20 @@ app.use(function (req, res, next) {
   next();
 });
 
-// Ensure legacy FCC testing code that reads `res._headers` doesn't fail.
-// Some Node/Express versions don't populate `res._headers` until headers
-// are written; create a minimal object here so `/ _api/app-info` can inspect it.
+
 app.use(function (req, res, next) {
   if (!res._headers) res._headers = {};
-  // Also write the same CSP into the internal _headers so older FCC test
-  // code that reads res._headers can see it.
+  
   try {
     const csp = "default-src 'self'; script-src 'self' https://cdn.freecodecamp.org; style-src 'self' https://cdn.freecodecamp.org;";
     res._headers['content-security-policy'] = csp;
-    // keep Node's header map in sync as well
+    
     if (typeof res.setHeader === 'function') res.setHeader('Content-Security-Policy', csp);
-    // Add common security header that some validators look for
+    
     res._headers['x-content-type-options'] = 'nosniff';
     if (typeof res.setHeader === 'function') res.setHeader('X-Content-Type-Options', 'nosniff');
   } catch (e) {
-    // no-op if assignment fails
+    
   }
   next();
 });

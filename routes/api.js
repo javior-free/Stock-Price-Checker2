@@ -32,7 +32,7 @@ async function findStock(stock) {
 async function saveStock(stock, like, ip) {
   let saved = {};
   if (!stock) {
-    // avoid creating entries with falsy stock values
+    
     return { likes: [] };
   }
   const foundStock = await findStock(stock);
